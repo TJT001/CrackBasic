@@ -1,4 +1,5 @@
-﻿// HelloMFC.cpp : 定义应用程序的入口点。
+﻿// #include "..\InitMFC\MyWinApp.h"
+// HelloMFC.cpp : 定义应用程序的入口点。
 
 #include "HelloMFC.h"
 
@@ -17,3 +18,5 @@ CMainWindow::CMainWindow()
 	RECT rect = { 500, 400, 800, 700 };
 	Create(NULL, L"HelloMFC",WS_OVERLAPPEDWINDOW,rect);
 }
+
+
