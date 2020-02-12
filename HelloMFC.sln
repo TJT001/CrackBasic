@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DyCreateMFC", "DyCreateMFC\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgMapMFC", "msgMapMFC\msgMapMFC.vcxproj", "{A0767EF5-2AFB-4157-ADA9-AE73D8F29AC4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GDI", "GDI\GDI.vcxproj", "{4478F84E-4D57-4EB5-88A0-5DF513899451}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{A0767EF5-2AFB-4157-ADA9-AE73D8F29AC4}.Release|x64.Build.0 = Release|x64
 		{A0767EF5-2AFB-4157-ADA9-AE73D8F29AC4}.Release|x86.ActiveCfg = Release|Win32
 		{A0767EF5-2AFB-4157-ADA9-AE73D8F29AC4}.Release|x86.Build.0 = Release|Win32
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Debug|x64.ActiveCfg = Debug|x64
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Debug|x64.Build.0 = Debug|x64
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Debug|x86.ActiveCfg = Debug|Win32
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Debug|x86.Build.0 = Debug|Win32
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Release|x64.ActiveCfg = Release|x64
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Release|x64.Build.0 = Release|x64
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Release|x86.ActiveCfg = Release|Win32
+		{4478F84E-4D57-4EB5-88A0-5DF513899451}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
