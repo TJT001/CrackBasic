@@ -252,7 +252,7 @@ afx_msg void OnKeyDown(
     UINT nFlags);
 /*
 nChar
-指定给定键的虚拟键代码。 有关标准虚拟键代码的列表，请参阅 Winuser。h
+指定给定键的虚拟键代码。 有关标准虚拟键代码的列表，请参阅 Winuser.h
 nRepCnt
 重复计数（用户按住该键时，重复击键的次数）。
 nFlags
@@ -268,5 +268,41 @@ nFlags
 对于 WM_KEYDOWN 消息，键转换位（位15）为0，上下文代码位（第13）为0。
 */
 
+```
+
+* 安装一个拦截键盘消息的钩子
+
+```cpp
+HHOOK g_Hook;
+HWND g_Wnd;
+
+// 回调函数
+LRESULT CALLBACK LowLevelKeyboardProc(int nCode, // hook code
+	WPARAM wParam,  // message identifier
+	LPARAM lParam)  // meaage data
+{
+	if (wParam == WM_KEYDOWN)
+	{
+		MessageBox(NULL, L"KEYDOWN", L"提示",MB_OK);
+	}
+	return CallNextHookEx(g_Hook, nCode, wParam, lParam);
+}
+
+
+BOOL StartHook(HWND hwnd)
+{
+	if (hwnd == NULL)
+		return false;
+	g_Wnd = hwnd;
+	g_Hook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandleW(L"MFCKeyHOOKDll.dll"), 0);
+	if (g_Hook)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
 ```
 

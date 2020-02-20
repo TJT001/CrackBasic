@@ -1,5 +1,6 @@
 ﻿
 #include "keyMessage.h"
+#define MWM_MYMSG_1 WM_USER+1
 
 CMyApp m_objApp;
 
@@ -18,7 +19,8 @@ IMPLEMENT_DYNCREATE(CMainWindow, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainWindow, CFrameWnd)
 	ON_WM_KEYDOWN()
-	
+	ON_WM_CHAR()
+	ON_MESSAGE(MWM_MYMSG_1, OnMyMessage)
 END_MESSAGE_MAP()
 
 
@@ -30,14 +32,46 @@ CMainWindow::CMainWindow()
 
 void CMainWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	CString str;
+	/*CString str;
 	if (nChar = VK_F1)
 	{
 		str.Format(L"OnKeyDown: %c", nChar);
 		OutputDebugString(str);
+	}*/
+	if (nChar == VK_F2)
+	{
+		if (StartHook())
+		{
+			SetWindowText(L"调用成功");
+		}
+		else
+		{
+			SetWindowText(L"调用失败");
+		}
 	}
+}
+
+void CMainWindow::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 
 }
 
+LRESULT CMainWindow::OnMyMessage(WPARAM wParam, LPARAM lParam)
+{
+	if (wParam == WM_KEYDOWN)
+	{
+		MessageBox(L"keydown", L"提示", MB_OK);
+	}
 
+	return 0;
+}
+
+BOOL CMainWindow::StartHook()
+{
+	// 定义一个函数指针
+	typedef BOOL (*STARTHOOK)(HWND hwnd);
+	STARTHOOK stFun;
+	stFun = (STARTHOOK)GetProcAddress(LoadLibrary(L"MFCKeyHOOKDll.dll"), "StartHook");
+	return stFun(m_hWnd);
+}
 
