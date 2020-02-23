@@ -264,3 +264,64 @@ void CMainWindow::OnLButtonDown(UINT nFlags, CPoint point)
 
 ​       消息会按照规定的线路游走于各个对象之间，知道找到它的消息处理函数，如果找不到，则最终把他交给::DefWindowProc函数处理
 
+
+
+# MFC对话框
+
+​        MFC的对话框实际上是一个窗口，它不仅可以接收消息，而且还可以被移动和关闭,还可以在它的客户区域进行绘图，我们可以把它看成是一个大的容器，在上面可以放置各种各样的控件，使程序支持用户输入的手段更加的丰富。
+
+* 向导生成的对话框分析
+
+* 模态对话框和非模态对话框
+
+# MFC控件
+
+* 控件的属性和方法
+  ### BUTTON
+  
+  
+  
+  ### EDIT
+  
+  
+  
+  ### RADIOBOX
+  
+  
+  
+  ### Ccombobox
+  
+  ​        类CComboBox封装了Windows组合框。组合框由一个列表框和一个静态控件（或编辑控件）组成。列表框部分可以是一直显示的，也可以是隐藏的，在用户单击编辑控件边上的按钮（下拉箭头）时下拉该列表框。列表框中当前选中的项（如果有的话）显示在静态控件或编辑控件中。如果组合框带有下拉风格，则当用户在编辑框中输入列表项的开始字符时，对应项（如果有的话）中的第一个将会加亮显示。
+  
+  ```cpp
+  /*  控件类型
+  Simple 总是可见 编辑控件  
+  Drop-down 当用户单击控件边上的下拉箭头时 编辑控件  
+  Drop-downlist 当用户单击控件边上的下拉箭头时 静态控件  
+  */
+  ```
+  
+  * 控件下拉的多行显示，在data中编辑并用分号隔开下一行
+  * Ccombobox消息
+
+```cpp
+// 下拉事件
+void CCcomboxDlgDlg::OnDropdownCombo1()
+{
+	SetWindowText(L"OnDropdownCombo1");
+}
+
+// 改变选中
+void CCcomboxDlgDlg::OnSelchangeCombo1()
+{
+	SetWindowText(L"OnSelchangeCombo1");
+}
+
+```
+
+
+
+
+
+
+
