@@ -323,5 +323,28 @@ void CCcomboxDlgDlg::OnSelchangeCombo1()
 
 
 
+* ListCtrl控件
+  * 设置控件的风格report
+  * CListCtrl的扩展风格
+
+```cpp
+#define LVS_EX_GRIDLINES        0x00000001 // 网格线
+#define LVS_EX_SUBITEMIMAGES    0x00000002 // 
+#define LVS_EX_CHECKBOXES       0x00000004 // 带复选框
+#define LVS_EX_TRACKSELECT      0x00000008 // 自动换行
+#define LVS_EX_HEADERDRAGDROP   0x00000010 
+#define LVS_EX_FULLROWSELECT    0x00000020 // applies to report mode only使某行高亮
+#define LVS_EX_ONECLICKACTIVATE 0x00000040 // 单击激活
+#define LVS_EX_TWOCLICKACTIVATE 0x00000080 // 双击激活
+#define LVS_EX_FLATSB           0x00000100 // 扁平滚动条
+#define LVS_EX_REGIONAL         0x00000200 // 
+#define LVS_EX_INFOTIP          0x00000400 // listview does InfoTips for you
+#define LVS_EX_UNDERLINEHOT     0x00000800
+#define LVS_EX_UNDERLINECOLD    0x00001000
+#define LVS_EX_MULTIWORKAREAS   0x00002000
+#define LVS_EX_LABELTIP         0x00004000 // listview unfolds partly hidden labels if it does not have infotip text
+#define LVS_EX_BORDERSELECT     0x00008000 // border selection style instead of highlight
+```
+
 
 
