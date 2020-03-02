@@ -40,20 +40,53 @@
 
 * UDP的收发函数
 
+```cpp
+int
+WSAAPI
+sendto(
+    _In_ SOCKET s,
+    _In_reads_bytes_(len) const char FAR * buf,
+    // 要传送的数据
+    _In_ int len,
+    // 长度
+    _In_ int flags,
+    // 指定函数的方式，一般为0
+    _In_reads_bytes_(tolen) const struct sockaddr FAR * to,
+    // 目标地址
+    _In_ int tolen
+    // 指定地址的长度
+    );
 
+
+int
+WSAAPI
+recvfrom(
+    _In_ SOCKET s,
+    _Out_writes_bytes_to_(len, return) __out_data_source(NETWORK) char FAR * buf,
+    // 要接收的数据
+    _In_ int len,
+    // 长度
+    _In_ int flags,
+    // 方式，同为0
+    _Out_writes_bytes_to_opt_(*fromlen, *fromlen) struct sockaddr FAR * from,
+    // 客户端地址
+    _Inout_opt_ int FAR * fromlen
+    // 地址长度
+    );
+```
 
 
 
 ## 阻塞式模型
 
+* 什么是阻塞式模型
 
+在创建套接字后，默认都是阻塞式的WinSocket的**IO**函数，必须等函数完成相应的I/O操作之后才能继续。
 
+* **阻塞式迭代模式**：每次只服务一个连接，只有服务完成当前客户端连接后才会继续服务下一个客户端连接
 
+  **步骤**
 
-* **阻塞式迭代模式**
-
-  每次只服务一个连接，只有服务完成当前客户端连接后才会继续服务下一个客户端连接
-
-  
+  1. 
 
 * **阻塞式并发连接模式**：通过多线程，可以同时服务多个连接，每一个线程处理一个客户端连接

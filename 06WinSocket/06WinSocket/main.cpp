@@ -28,8 +28,8 @@ void TCPServSock()
 	
 	sockaddr_in addrServer = { 0 };
 	addrServer.sin_family = AF_INET;
-	addrServer.sin_port = htons(0x8888);
-	// addrServer.sin_addr.s_addr = htonl(INADDR_ANY);
+	//addrServer.sin_port = htons(0x8888);
+	addrServer.sin_addr.s_addr = htonl(INADDR_ANY);
 	inet_pton(AF_INET, "127.0.0.1", &addrServer.sin_addr.S_un);
 
 	// 绑定
@@ -124,38 +124,50 @@ void UDPServerSock()
 	// 初始化
 	WSADATA wsaData = { 0 };
 	SOCKET sockServer = { 0 };
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	{
+		printf("WSAStartup失败\n");
+	}
 
-	// 创建 UDP类型
-	int nRet = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (nRet == INVALID_SOCKET)
+	// 创建 UDP类型 -> SOCK_DGRAM
+	sockServer = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (sockServer == INVALID_SOCKET)
 	{
 		printf("socket 失败\n");
 		return;
 	}
 
+
 	// 绑定  填写IP和端口
-	sockaddr_in addrSer;
+	sockaddr_in addrSer = { 0 };
+	
 	addrSer.sin_family = AF_INET;
-	addrSer.sin_port = htons(0x8080);
-	addrSer.sin_addr.s_addr = inet_pton(addrSer.sin_family, "127.0.0.1", &addrSer.sin_addr.S_un);
-	bind(sockServer, (SOCKADDR*)&addrSer, sizeof(addrSer));
+	addrSer.sin_port = htons(8888);
+	// inet_pton(addrSer.sin_family, "127.0.0.1", &addrSer.sin_addr.S_un);
+	addrSer.sin_addr.s_addr = htonl(ADDR_ANY);
+	//addrSer.sin_addr.s_addr = inet_addr("127.0.0.1");
+	int nAddrLen = sizeof(sockaddr_in);
+	int nRet = bind(sockServer, (SOCKADDR*)&addrSer, nAddrLen);
+	int nError = WSAGetLastError();
+
+	if (nRet == SOCKET_ERROR)
+	{
+		printf("bind 失败\n");
+	}
 
 	sockaddr_in ClientAddr = { 0 };
-	int clientAddrLen = sizeof(addrSer);
-
-	// getchar();
+	int clientAddrLen = sizeof(sockaddr_in);
 	nRet = recvfrom(sockServer, szBuf, 512, 0, (SOCKADDR*)&ClientAddr, &clientAddrLen);
-	//getchar();
 
-	if (nRet > 0)
-	{
-		printf(szBuf);
+	while (nRet)
+	{	
+		printf("已接收:%s\n",szBuf);
+		recvfrom(sockServer, szBuf, 512, 0, (SOCKADDR*)&ClientAddr, &clientAddrLen);
 	}
-	
-	// getchar();
-	printf("接收成功\n");
 
+	// 清理环境
+	closesocket(sockServer);
+	WSACleanup();
 }
 
 int main()
