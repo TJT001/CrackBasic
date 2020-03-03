@@ -6,7 +6,7 @@
 using std::cout;
 using std::cin;
 using std::endl;
-#define nBuffSize 512  // 缓冲区
+#define nBuffSize 255  // 缓冲区
 
 // 一个打印错误的函数
 void debugLogString(char* logStr) { cout << logStr << WSAGetLastError() << endl; }
@@ -33,7 +33,7 @@ SOCKET bind_listen(int nBacklog)
 	SOCKADDR_IN sAddrSer = { 0 };
 	sAddrSer.sin_family = AF_INET;
 	sAddrSer.sin_addr.s_addr = htonl(ADDR_ANY);
-	sAddrSer.sin_port = htons(0x8888);
+	sAddrSer.sin_port = htons(8080);
 
 	if (bind(hSocket, (SOCKADDR*)&sAddrSer, sizeof(sAddrSer)) == SOCKET_ERROR)
 	{
@@ -57,13 +57,13 @@ SOCKET acceptConection(SOCKET socket)
 {
 	sockaddr_in sAddrConect = { 0 };
 	int nAcceptLen = sizeof(sockaddr_in);
-	if (accept(socket, (SOCKADDR*)&sAddrConect, &nAcceptLen)
-		== INVALID_SOCKET)
+	SOCKET sd = accept(socket, (SOCKADDR*)&sAddrConect, &nAcceptLen);
+	if (sd == SOCKET_ERROR)
 	{
 		debugLogString("acceptConect error:");
 		return INVALID_SOCKET;
 	}
-	return socket;
+	return sd;
 }
 
 // 处理一个客户端的连接，实现接收和发送数据
@@ -129,7 +129,7 @@ BOOL closeConnect(SOCKET socket)
 		else if (nRetByte > 0)
 		{
 			debugLogString("closeConnect-> 错误的接收数据");
-			// return FALSE;
+		    // return FALSE;
 			break;
 		}
 	} while (nRetByte != 0);
@@ -142,12 +142,26 @@ BOOL closeConnect(SOCKET socket)
 	return TRUE;
 }
 
+// 并发式的客户端处理
+DWORD WINAPI clientThreadFun(LPVOID lParam)
+{
+	SOCKET sd = (SOCKET)lParam;
+	// 客户端处理
+	if (clientConFun(sd) == FALSE) {
+		debugLogString("clientThreadFun->clientConFun error:");
+	}
+
+	// 关闭一个客户端连接
+	if (closeConnect(sd) == FALSE) {
+		debugLogString("clientThreadFun->closeConnect error:");
+	}
+	return sd;
+}
 
 // 服务器主体
-
 void MySerFun()
 {
-	SOCKET hSocket = bind_listen(3);
+	SOCKET hSocket = bind_listen(1);
 	if (hSocket == INVALID_SOCKET)
 	{
 		debugLogString("MySerFun->bind_listen error:");
@@ -159,16 +173,26 @@ void MySerFun()
 		SOCKET sd = acceptConection(hSocket);
 		if (sd == INVALID_SOCKET){
 			debugLogString("MySerFun->acceptConection error:");
+			return;
 		}
 
-		// 客户端处理
-		if (clientConFun(sd) == FALSE) {
-			debugLogString("MySerFun->clientConFun error:");
-		}
+		//// 客户端处理
+		//if (clientConFun(sd) == FALSE) {
+		//	debugLogString("MySerFun->clientConFun error:");
+		//}
 
-		// 关闭一个客户端连接
-		if (closeConnect(sd) == FALSE) {
-			break;
+		//// 关闭一个客户端连接
+		//if (closeConnect(sd) == FALSE) {
+		//	break;
+		//}
+
+		// 当接收到客户端的连接请求时，重新开一个线程
+		DWORD dwThread;
+		HANDLE hThread = CreateThread(0, 0, clientThreadFun, (LPVOID)sd, 0, &dwThread);
+		if (hThread)
+		{
+			// cout << "创建线程失败\n" << endl;
+			CloseHandle(hThread);
 		}
 	}
 	
