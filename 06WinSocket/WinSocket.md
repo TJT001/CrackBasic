@@ -86,3 +86,18 @@ recvfrom(
 * **阻塞式迭代模式**：每次只服务一个连接，只有服务完成当前客户端连接后才会继续服务下一个客户端连接
 
 * **阻塞式并发连接模式**：通过多线程，可以同时服务多个连接，每一个线程处理一个客户端连接
+
+## 非阻塞式模型
+
+* 函数原型
+
+```cpp
+WINSOCK_API_LINKAGE
+int WSAAPI
+ioctlsocket(
+    _In_ SOCKET s,
+    _In_ long cmd,
+    _Inout_ u_long FAR * argp  // 1表示非阻塞, 0表示阻塞
+    );
+```
+
