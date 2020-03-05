@@ -8,6 +8,13 @@ using std::endl;
 
 #define BufMaxSize 255  // 缓冲区
 
+/**************************
+ *						  *
+ *注释：  代码逻辑需优化     *
+ *						  *
+ **************************/
+
+
 // 一个打印错误的函数
 void debugLogString(char* logStr) { cout << logStr << WSAGetLastError() << endl; }
 
@@ -99,7 +106,6 @@ int main()
 		}
 
 	}
-
 
 	return 0;
 }

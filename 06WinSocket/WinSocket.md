@@ -101,3 +101,68 @@ ioctlsocket(
     );
 ```
 
+## Select模型
+
+* 函数原型
+
+```cpp
+WINSOCK_API_LINKAGE
+int WSAAPI
+select(
+    _In_ int nfds,                      // 直接为o
+    _Inout_opt_ fd_set FAR * readfds,   // 套接字集合 针对读操作 accept recv
+    _Inout_opt_ fd_set FAR * writefds,  // 针对写操作    connect send等
+    _Inout_opt_ fd_set FAR * exceptfds, // 针对异常
+    _In_opt_ const struct timeval FAR * timeout  // 超时设置，为NULL一直等待
+    );
+// 返回值 1 如果超时则返回0，如果出现错误则返回 SOCKET_ERROR
+// 结构体 fs_set
+
+typedef struct fd_set {
+        u_int fd_count;               /* how many are SET?  多少个套接字*/
+        SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs 套接字数组*/
+} fd_set;
+
+#define FD_SETSIZE 64   //所以最大处理的套接字不超过64个，可并发处理64个套接字
+FD_ZERO   // 清0
+FD_SET    // 添加套接字
+FD_ISSET  // 如果参数世界和的成员 返回非0 否则返回0 
+```
+
+* 查询socket状态的函数
+
+```cpp
+WINSOCK_API_LINKAGE
+int WSAAPI
+getsockopt(
+    _In_ SOCKET s,    // 套接字
+    _In_ int level,   // 选项的等级 包括SOL_SOCKET IPPROTO_TCP
+    _In_ int optname, // SOCKET选项的名称
+    _Out_writes_bytes_(*optlen) char FAR * optval,   // 用于接收的缓冲区
+    _Inout_ int FAR * optlen    // 大小
+    );
+
+返回值： 成功返回0 失败返回SOCKET_ERROR
+```
+
+
+
+## WSAAsyncSelect
+
+* 函数原型
+
+```cpp
+WINSOCK_API_LINKAGE
+int WSAAPI
+WSAAsyncSelect(
+    _In_ SOCKET s,
+    _In_ HWND hWnd,
+    _In_ u_int wMsg,
+    _In_ long lEvent
+    );
+```
+
+# OPENSSL的使用
+
+## 搭建环境
+
