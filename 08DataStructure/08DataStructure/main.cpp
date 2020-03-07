@@ -16,7 +16,7 @@
 **************************/
 int MaxSubseqSum1(int A[], int N)
 {
-	int ThisSum, MaxSum;
+	int ThisSum = 0, MaxSum = 0;
 	int i, j, k;
 	// i是子列左端位置
 	for (i = 0; i < N; i++)
@@ -36,7 +36,7 @@ int MaxSubseqSum1(int A[], int N)
 // 方法二
 int MaxSubseqSum2(int A[], int N)
 {
-	int ThisSum, MaxSum;
+	int ThisSum = 0, MaxSum = 0;
 	int i, j;
 	// i是子列左端位置
 	for (i = 0; i < N; i++)
@@ -62,10 +62,10 @@ int Max3(int A, int B, int C)
 
 int DivideAndConquer(int List[], int left, int right)
 {
-	int MaxLeftSum, MaxRightSum;    // 存在左右子问题的解
-	int MaxLeftBorderSum, MaxRightBorderSum;  // 存在跨分界线的结果
+	int MaxLeftSum = 0, MaxRightSum = 0;    // 存在左右子问题的解
+	int MaxLeftBorderSum = 0, MaxRightBorderSum = 0;  // 存在跨分界线的结果
 
-	int LeftBorderSum, RightBorderSum;
+	int LeftBorderSum = 0, RightBorderSum = 0;
 	int Center, i;
 
 	if (left = right)      // 递归条件终止
@@ -113,13 +113,13 @@ int DivideAndConquer(int List[], int left, int right)
 int MaxSubseqSum3(int Lsit[], int N)
 {
 	// 保持与前两种算法相同的接口
-	return DivideAndConquer(List, 0, N - 1);
+	return DivideAndConquer(Lsit, 0, N - 1);
 }
 
 // 方法四  在线处理
 int MaxSubseqSum4(int A[], int N)
 {
-	int ThisSum, MaxSum;
+	int ThisSum = 0, MaxSum = 0;
 	int i;
 	// i是子列左端位置
 	for (i = 0; i < N; i++)

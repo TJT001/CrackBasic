@@ -18,9 +18,12 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ChainData.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LineData.h">
+    <ClInclude Include="LineData.cpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
