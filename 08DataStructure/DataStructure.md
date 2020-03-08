@@ -340,11 +340,77 @@ bool Delete(List L, Position p)
   a * (b + c) / d ———— a b c + * d /
 ```
 
+* 中例转换示例：`（ 2*（9+6/3-5）+4）`
 
+![image-20200308161735725](DataStructure.assets/image-20200308161735725.png)
 
 ### 栈的顺序存储实现
 
+* 栈的顺序存储结构通常是由一个**一维数组**和一个记录**栈顶元素位置**的变量组成
 
+```c
+typedef int Position;
+typedef int ElementType;
+
+struct SNode {
+	ElementType *Data; // 存储元素的数组
+	Position Top;      // 栈顶指针
+	int MaxSize;       // 栈顶的最大容量
+};
+
+typedef SNode* Stack;
+#define ERROR -1
+
+// 创建一个栈
+Stack Create(int MaxSize)
+{
+	Stack s = (Stack)malloc(sizeof(struct SNode));
+	s->Data = (ElementType*)malloc(sizeof(ElementType));
+	s->Top = -1;
+	s->MaxSize = MaxSize;
+	return s;
+}
+
+// 判断站是否满
+bool Isfull(Stack S)
+{
+	return S->Top = S->MaxSize - 1;
+}
+
+// 入栈
+bool Push(Stack S, ElementType X)
+{
+	if (Isfull(S))
+	{
+		std::cout << "栈已满，操作失败\n" << std::endl;
+		return false;
+	}
+	else
+	{
+		// 栈顶加 1
+		return S->Data[++(S->Top)] = X;
+	}
+}
+
+// 站是否为空
+bool IsEmpty(Stack S)
+{
+	// 注意双等号
+	return (S->Top == -1);
+}
+
+ElementType PopStack(Stack S)
+{
+	if (IsEmpty(S))
+	{
+		std::cout << "栈已空，操作失败\n" << std::endl;
+	}
+	else
+	{
+		return (S->Data[(S->Top)--]);
+	}
+}
+```
 
 
 
@@ -352,8 +418,93 @@ bool Delete(List L, Position p)
 
 * 栈的链式存储结构实际上就是一个单链表，叫做链栈。插入和删除操作只能在链栈的栈顶进行
 
+```c
+typedef int ElementType;
+typedef struct SNode* ptrToStack;
+
+struct SNode {
+	ElementType Data;  // 存储栈中元素
+	ptrToStack Next;   // 栈顶指针
+};
+
+typedef ptrToStack Stack;
+#define ERROR -1
+
+// 创建一个栈
+Stack Create( )
+{
+	Stack s = (Stack)malloc(sizeof(struct SNode));
+	s->Next = NULL;
+	return s;
+}
+
+// 站是否为空
+bool IsEmpty(Stack S)
+{
+	// 注意双等号
+	return (S->Next == NULL);
+
+}
+
+// 入栈
+bool Push(Stack S, ElementType X)
+{
+	// 将元素压入堆栈 S
+	ptrToStack temCell = NULL;
+	temCell = (ptrToStack)malloc(sizeof(struct SNode));
+	temCell->Data = X;
+	temCell->Next = S->Next;
+
+	S->Next = temCell;
+	return true;
+}
+
+// 弹出数据
+ElementType PopStack(Stack S)
+{
+	ptrToStack firstCell;
+	ElementType topElem;
+
+	if (IsEmpty(S))
+	{
+		printf("堆栈空\n");
+		return ERROR;
+	}
+	else
+	{
+		firstCell = S->Next;
+		topElem = firstCell->Data;
+		S->Next = firstCell->Next;
+		free(firstCell);
+		return topElem;
+	}
+
+}
+```
+
 ### 堆栈的其他应用
 
 * 函数调用及递归实现
 * 深度优先搜索
 * 回溯算法
+
+
+
+## 队列
+
+**队列：**具有一定操作约束的线性表，插入和删除操作只能在一端插入，而在另一端删除
+
+* 数据插入：入队
+* 数据删除：出队
+
+### 队列的线性实现
+
+```c
+// 构成元素
+// 一个一维数组，记录队列头节点位置的变量front，记录尾元素位置的变量rear
+
+```
+
+### 队列的链式实现
+
+* 队列的链式存储结构也可以使用一个单链表实现，插入和删除操作分别在链表的两头进行
