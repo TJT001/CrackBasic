@@ -1,6 +1,6 @@
 // #include <stdio.h>
 // #include <stdlib.h>
-#include "LineData.h"
+//#include "LineData.h"
 
 
 
@@ -137,5 +137,6 @@ int MaxSubseqSum4(int A[], int N)
 
 int main()
 {
+
 	return 0;
 }

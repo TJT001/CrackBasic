@@ -117,7 +117,191 @@ int MaxSubseqSum(int A[], int N)
 ## 线性表的顺序存储实现
 
 * 线性存储
+
+```cpp
+// 定义一个线性表
+typedef struct LNode *List;
+typedef int Position;
+typedef int ElementType;
+
+// 通过数组的连续存储空间顺序存放线性表的各元素
+struct LNode {
+	ElementType Data[MAXSIZE];
+	int Last;
+};
+
+struct LNode L;
+
+// 线性表的初始化
+List MakeEmpty()
+{
+	List Ptrl;
+	Ptrl = (List)malloc(sizeof(struct LNode));
+	Ptrl->Last = -1;
+	return Ptrl;
+ }
+
+// 查找
+#define ERROR -1
+
+Position find(int i, ElementType X)
+{
+	Position i = 0;
+	while (i < L.Last && L.Data[i] != X)
+	{
+		i++;
+	}
+	if (i > L.Last) return ERROR;
+	else  return i;    //在表外返回错误
+	
+}
+
+// 插入
+bool Insert(List L, ElementType X, Position P)
+{
+	// 检查空间是否已满
+	if (P = MAXSIZE - 1)
+	{
+		printf("空间已满\n");
+		return false;
+	}
+
+	// 检查位置是否合法
+	if (P > L->Last || P < 0)
+	{
+		printf("位置不合法\n");
+		return false;
+	}
+	for (int i = L->Last; i >= P; i--)
+	{
+		// 将位置p及以后的元素顺序向后移动
+		L->Data[i + 1] = L->Data[i];
+	}
+		L->Data[P] = X;   // 新的元素插入
+		L->Last++;
+		return true;
+}
+
+// 删除
+bool Delete(List L, ElementType X, Position P)
+{
+	// 检查位置是否合法
+	// 检查位置是否合法
+	if (P > L->Last || P < 0)
+	{
+		printf("没有该元素\n");
+		return false;
+	}
+	// 位置P的后一个元素向前移动
+	for (int i = P+1; i <= L->Last; i++)
+	{
+		L->Data[i-1] = L->Data[i];
+	}
+	// 总长度 - 1；
+	L->Last--;
+	return true;
+}
+
+```
+
 * 链式存储
+
+```cpp
+/*******************
+*				   *
+*  链式存储实现      *
+*				   *
+********************/
+
+
+// 不需要逻辑上相邻的连个元素物理上也相邻
+// 通过链来建立起数据元素之间的逻辑关系
+
+// 定义一个线性表
+//typedef struct LNode* ptrToLNode;
+typedef int ElementType;
+
+// 通过数组的连续存储空间顺序存放线性表的各元素
+struct LNode {
+	ElementType Data;   // 节点代表的数据
+	LNode* Next;        // 指向下一个节点的位置
+};
+
+typedef LNode* Position;
+typedef LNode* List;
+
+#define ERROR NULL
+
+// 求表长
+int Length(List Ptr)
+{
+	int j = 0;
+	while (Ptr)
+	{
+		Ptr = Ptr->Next;
+		j++;
+	}
+	return j;
+}
+
+// 查找
+Position Find(List L, ElementType X)
+{
+	Position p = L;    // P指向L的第一个节点
+	while (p && p->Data != X)
+		p = p->Next;
+	if (p)
+		return p;
+	else
+		return ERROR;
+}
+
+// 插入
+bool Insert(List L, ElementType X, Position p)
+{
+	Position tem, pre;
+	// 查找p的前一个节点
+	for (pre = L; pre && pre->Next != p; pre = pre->Next);
+	
+	// 位置检查
+	if (pre = NULL)
+	{
+		printf("插入的位置有误\n");
+		return false;
+	}
+	else
+	{
+		tem = (Position)malloc(sizeof(struct LNode));
+		tem->Data = X;
+		tem->Next = p;
+		pre->Next = tem;
+		return true;
+	}
+}
+
+// 带头节点的删除
+bool Delete(List L, Position p)
+{
+	Position tmp, pre;
+	for (pre = NULL; pre && pre->Next != p; pre = pre->Next);
+	
+	if (pre == NULL || p == NULL)   // p所指的节点不在L中
+	{
+		printf("删除的的位置有误\n");
+		return false;
+	}
+	else
+	{
+		// 找到了p的前一个节点
+		// 将p的节点删除
+		pre->Next = p->Next;
+		free(p);
+		return true;
+	}
+}
+```
+
+
 
 ### 广义表
 
@@ -138,6 +322,25 @@ int MaxSubseqSum(int A[], int N)
 ## 堆栈
 
 * 前缀、中缀和后缀表达式
+* 表达式求值的基本方法
+
+从左到右读入表达式的各项，运算数：入栈。运算符：从栈中弹出适当数量的运算数，计算并结果入栈，最后，堆栈顶上的元素就是表达式的结果值。
+
+* **基本策略**：将中缀表达式转化为后缀表达式
+
+```c
+//例1：
+ 2+9/3-5 ————>   2 9 3 5 / + -
+// 运算数的相对顺序不变
+// 运算符号顺序发生改变
+     需要存储等待中运算符号
+     要与当前的运算符与等待中的预算符号比较
+     
+//例2：
+  a * (b + c) / d ———— a b c + * d /
+```
+
+
 
 ### 栈的顺序存储实现
 
@@ -147,7 +350,7 @@ int MaxSubseqSum(int A[], int N)
 
 ### 栈的链式存储实现
 
-
+* 栈的链式存储结构实际上就是一个单链表，叫做链栈。插入和删除操作只能在链栈的栈顶进行
 
 ### 堆栈的其他应用
 

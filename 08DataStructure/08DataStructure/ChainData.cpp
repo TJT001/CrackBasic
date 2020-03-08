@@ -76,7 +76,7 @@ bool Insert(List L, ElementType X, Position p)
 // 带头节点的删除
 bool Delete(List L, Position p)
 {
-	Position tmp, pre;
+	Position pre;
 	for (pre = NULL; pre && pre->Next != p; pre = pre->Next);
 	
 	if (pre == NULL || p == NULL)   // p所指的节点不在L中
