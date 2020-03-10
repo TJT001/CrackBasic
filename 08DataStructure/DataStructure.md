@@ -9,7 +9,7 @@
 数据结构（data structure）是计算机中存储、组织 数据的方式。通常情况下，精心选择的数据结构可以 带来最优效率的算法。
 
 * 解决问题方法的效率，跟数据的组织方式有关
-* 解决问题方法的效率，跟空间的利用效率有关有关
+* ###### 解决问题方法的效率，跟空间的利用效率有关有关
 * 解决问题方法的效率，跟算法的巧妙程度有关
 
 * 数据对象在计算机中的组织方式
@@ -497,14 +497,215 @@ ElementType PopStack(Stack S)
 * 数据插入：入队
 * 数据删除：出队
 
+### 顺环队列
+
+一个n节点的队列有n+1中情况；1 。。。。N和空，在判断顺换队列空和满的的情况都是front = rear,造成空和慢的情况无法区分![image-20200310104123039](DataStructure.assets/image-20200310104123039.png)
+
+**解决方法：**
+
+* 使用额外的标记，size或者Tag域
+
+插入元素的时候size加1，在删除元素的时候size - 1，最后判断size的值。
+
+tag域在插入的时候tag设为1，删除的时候tag设为0，判断Tag的状态来判断最后一次的操作是插入还是删除。
+
 ### 队列的线性实现
+
+* 队列的顺序存储结构通常由一个一维数组和一个记录队列头元 素位置的变量front以及一个记录队列尾元素位置的变量rear组成
 
 ```c
 // 构成元素
 // 一个一维数组，记录队列头节点位置的变量front，记录尾元素位置的变量rear
+#define ERROR -1
 
+typedef int Position;
+typedef int ElementType;
+
+
+struct QNode {
+	ElementType *Data;   // 存储元素的数组
+	Position Front, Rear;  // 栈头和栈尾指针
+	int MaxSize;   // 队列的最大容量
+};
+
+typedef struct QNode* Queue;
+
+// 创建一个队列
+Queue CreateQueue(int MaxSize)
+{
+	Queue Q = (Queue)malloc(sizeof(struct QNode*));
+	Q->Data = (ElementType*)malloc(MaxSize * sizeof(ElementType));
+	Q->Front = Q->Rear = 0;
+	Q->MaxSize = MaxSize;
+	return Q;
+}
+
+// 是否满
+bool Isfull(Queue Q)
+{
+	return ((Q->Rear + 1) % Q->MaxSize == Q->Front);
+}
+
+// 向队列中增加数据
+bool AddQ(Queue Q,ElementType x)
+{
+	if (Isfull(Q))
+	{
+		printf("队列已满\n");
+		return false;
+	}
+	else
+	{
+        // Front和rear 指针的移动 采用“加1取 余”法，体 现了顺序存储的“循环 使用”。 
+		Q->Rear = ((Q->Rear + 1) % Q->MaxSize);
+		Q->Data[Q->Rear] = x;
+		return true;
+	}
+}
+
+// 队列是否为空
+bool IsEmpty(Queue Q)
+{
+	return (Q->Front == Q->Rear);
+}
+
+// 删除队列中的元素
+ElementType DeleteQ(Queue Q)
+{
+	if (IsEmpty(Q))
+	{
+		printf("队列已空\n");
+		return ERROR;
+	}
+	else
+	{
+		Q->Front = (Q->Front + 1) % Q->MaxSize;
+		return  Q->Data[Q->Front];
+	}
+}
 ```
 
 ### 队列的链式实现
 
 * 队列的链式存储结构也可以使用一个单链表实现，插入和删除操作分别在链表的两头进行
+
+```c
+/******************************
+*							  *
+*	队列的链式实现			      *
+*							  *
+*******************************/
+
+typedef struct Node* ptrToNode;
+typedef int ElementType;
+
+struct Node {
+	ElementType Data;   // 存储元素的数据
+	ptrToNode Next;  // 栈头和栈尾指针
+};
+
+typedef ptrToNode Position;
+
+struct QNode {
+	Position Front, Rear;  // 队列的头尾指针
+	int MaxSize;           // 最大容量
+};
+
+typedef struct QNode* Queue;
+
+// 队列是否为空
+bool IsEmpty(Queue Q)
+{
+	return (Q->Front == NULL);
+}
+
+
+// 删除队列中的元素
+ElementType DeleteQ(Queue Q)
+{
+	Position frontCell;
+	ElementType frontElem;
+
+	if (IsEmpty(Q))
+	{
+		printf("队列已空\n");
+		return ERROR;
+	}
+	else
+	{
+		frontCell = Q->Front;
+		if (Q->Front == Q->Rear)   // 若队列中只有一个元素
+			Q->Front = Q->Rear = NULL;
+		else
+			Q->Front = Q->Front->Next;
+		frontElem = frontCell->Data;
+		free(frontCell);
+		return frontElem;
+	}
+}
+```
+
+## 树
+
+### 树的定义
+
+树(Tree):n(n>=0)个节点构成的有限集合，当n = 0时，称为空树，对于任一棵非空树（n>0）,具备以下性质:
+
+* 树中有一个称为“根”的特殊节点，用R表示；
+
+* 其余节点可以分为m（m>0）个互不相交的有限集
+  $$
+  T_1 , T_2 ,T_3 ...,T_m
+  $$
+
+其中每个集合本身又是一棵树，称为原来树的子树`SubTree`。
+
+![image-20200310222947184](DataStructure.assets/image-20200310222947184.png) 
+
+***
+
+* 树的一些基本术语
+
+1. **节点的度** (*Degree*):节点的子树个数
+2. **树的的度:**所有节点中最大的度数
+3. **叶节点** (*Leaf*)：度为的节点
+4. **父节点** (*Parent*)：有子树的节点是其子树根节点的父节点
+5. **子节点** (*Child*):若A节点是B节点的父节点，则称B节点是A节点的子节点，子节点也称为孩子节点
+6. **兄弟节点** (*SibLing*):具有同一父节点的个节点彼此是兄弟节点
+
+* 树的一些基本术语
+
+7. **路径和路径长度**：从节点`n1`到`Nk`的路径为一个节点序列
+   $$
+   n_1 , n_2 , ... n_k ,n_j  是  n_{i+1} 的父节点
+   $$
+   路径所包含的边的个数为路径的长度
+
+8. **祖先节点**(*Ancestor*):沿树根到某一结点路径上的所有节点都是这个节点的祖先节点
+
+9. **子孙节点**(*Descendant*)：某一结点的子树中所有节点是这个节点的子孙
+
+10. **节点的层次**：规定根节点在一层，其它任一节点的层数是其父节点的层数加1
+
+11. **树的深度**(*Depth*):树中所有节点中的最大层次是这棵树的深度
+
+***
+
+![image-20200310230518131](DataStructure.assets/image-20200310230518131.png)
+
+### 树的表示
+
+* 儿子——兄弟表示法
+
+***
+
+![image-20200310230715936](DataStructure.assets/image-20200310230715936.png)
+
+### 二叉树的定义
+
+
+
+* 二叉树的几种形态
+  * 斜二叉树
+  * 完全二叉树（满二叉树）
+

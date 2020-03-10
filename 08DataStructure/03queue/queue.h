@@ -7,8 +7,8 @@
 
 //typedef int Position;
 //typedef int ElementType;
-
-
+//
+//
 //struct QNode {
 //	ElementType *Data;   // 存储元素的数组
 //	Position Front, Rear;  // 栈头和栈尾指针
