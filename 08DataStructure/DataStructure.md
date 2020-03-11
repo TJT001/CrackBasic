@@ -703,9 +703,108 @@ ElementType DeleteQ(Queue Q)
 
 ### 二叉树的定义
 
+定义：二叉树是一个又穷的节点集合，这个集合可以为空，若不为空则它是由根节点和称为其左子树和右子树的两个不相交的二叉树组成
+
+* 二叉树的五种基本形态
+* 二叉树的子树有左右顺序这份
+
+### 特殊二叉树
+
+* 斜二叉树(左斜树、右斜树)
+* 完美二叉树(*Perfect Binary Tree*),满二叉树(*Full Binary Tree*)
+
+* **完全二叉树**
+
+#### 几个重要的性质
+
+* 一个二叉树的第i层最多可容纳的节点数为：
+
+$$
+2^{i-1}   ,i >= 1
+$$
+
+* 深度为K的二叉树最大节点总数为：
+  $$
+  2^k - 1   ,k>=1
+  $$
+
+* 对任何非空二叉树T，若`n0`表示叶节点的个数，`n2`是度为2的非叶节点个数，那么两者满足关系
+
+$$
+n_0 = n_2 + 1
+$$
+
+* 二叉树的抽象数据类型定义
+
+#### 二叉树的存储结构
+
+* 顺序存储
+* 链表存储
+
+```c
+// 链表存储
+typedef struct TreeNode *BinTree;
+typedef BinTree Position;
+typedef int ElementType;
+
+struct TreeNode {
+	ElementType Data;
+	BinTree Left;
+	BinTree Right;
+};
+```
+
+#### 二叉树的遍历
+
+* 先序遍历——根、左、右
+
+* 中序遍历——左、根、右
+* 后序遍历——左、右、根
+* 层序遍历——从上到下，从左到右
+
+```c
+// 二叉树的遍历
+
+/****** 中序遍历 ******/
+void InorderTraversal(BinTree BT)
+{
+	if (BT)
+	{
+		InorderTraversal(BT->Left);
+		// 此处假设BT节点的访问就是打印数据
+		printf("%d\n", BT->Data);
+		InorderTraversal(BT->Right);
+	}
+}
+
+/****** 前序遍历 ******/
+void PreorderTraversal(BinTree BT)
+{
+	if (BT)
+	{
+		printf("%d\n", BT->Data);
+		PreorderTraversal(BT->Left);
+		PreorderTraversal(BT->Right);
+	}
+}
+
+/****** 后序遍历 ******/
+void PostorderTraversal(BinTree BT)
+{
+	PostorderTraversal(BT->Left);
+	PostorderTraversal(BT->Right);
+	printf("%d", BT->Data);
+}
+
+```
 
 
-* 二叉树的几种形态
-  * 斜二叉树
-  * 完全二叉树（满二叉树）
 
+## 二叉搜索树
+
+* 二叉搜索树的查找
+* 二叉搜索树的插入
+* 二叉搜索树的删除
+  1. 删除叶节点
+  2. 删除的节点有左右两棵子树
+  3. 
