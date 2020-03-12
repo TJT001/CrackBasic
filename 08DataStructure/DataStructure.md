@@ -804,7 +804,95 @@ void PostorderTraversal(BinTree BT)
 
 * 二叉搜索树的查找
 * 二叉搜索树的插入
+
+```c
+// 二叉搜索树的插入
+BinTree Insert(BinTree BST, ElementType X)
+{
+	if (!BST) // 若原树为空，生成并返回一个节点的二叉搜索树
+	{
+		BST = (BinTree)malloc(sizeof(TreeNode));
+		BST->Data = X;
+		BST->Left = BST->Right = NULL;
+	}
+	else
+	{
+		if (X < BST->Data)
+			BST->Left = Insert(BST->Left, X);   // 递归插入左子树
+		else if (X > BST->Data)
+		{
+			BST->Right = Insert(BST->Right, X);  // 递归插入右子树
+		}
+	}
+	return BST;
+}
+```
+
 * 二叉搜索树的删除
   1. 删除叶节点
   2. 删除的节点有左右两棵子树
-  3. 
+
+```c
+// 二叉树搜索树的删除
+BinTree Delete(BinTree BST, ElementType X)
+{
+	Position Tmp = NULL;
+	if (!BST)
+	{
+		printf("要删除的元素未找到\n");
+	}
+	else
+	{
+		if (X < BST->Data)
+			BST->Left = Delete(BST->Left, X);  // 左子树开始递归删除
+		else if (X > BST->Data)
+			BST->Right = Delete(BST->Right, X); // 右子树递归删除
+		else
+		{
+			// BST就是要删除的节点
+			// 如果被删除的节点有左右两个子节点
+			if (BST->Left && BST->Right)
+			{
+				// 从右子树中找最小的元素填充删除节点
+				Tmp = FindMin(BST->Right);
+				BST->Data = Tmp->Data;
+				// 从右子树中删除最小的元素
+				BST->Right = Delete(BST->Right, BST->Data);
+			}
+			else
+			{
+				// 被删除节点有一个或者无节点
+				Tmp = BST;
+				if (!BST->Left)  // 只有右孩子或者无节点
+					BST = BST->Right;
+				else
+					BST = BST->Left;
+				free(Tmp);
+			}
+		}
+	}
+	return BST;
+}
+```
+
+
+
+## 平衡二叉树
+
+* 什么是平衡二叉树
+
+**平衡因子**：
+$$
+BF(T) = h_L - h_R           
+其中h_L和h_R分别为T的左右子树的高度
+$$
+平衡二叉树（*Balance Binary Tree*）(`AVL`树)：空树，或者任一节点左、右书高度差绝对值不超过1即
+$$
+|BF(T)| \leqslant 1
+$$
+
+* 平衡二叉树的调整
+  * 左单璇
+  * 右单璇
+  * 左右双璇
+
