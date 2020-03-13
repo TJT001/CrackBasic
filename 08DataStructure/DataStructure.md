@@ -893,6 +893,134 @@ $$
 
 * 平衡二叉树的调整
   * 左单璇
+  
+  ```c
+  // 左单璇
+  AVLTree singleLeftRotation(AVLTree A)
+  {
+  	// A必须有一个左子树节点
+  	// 将A于B做左单璇，更新A与B的高度，返回新的根节点
+  	AVLTree B = A->Left;
+  	A->Left = B->Right;
+  	B->Right = A;
+  	A->Height = Max(getHeight(A->Left), getHeight(A->Right)) + 1;
+  	B->Height = Max(getHeight(B->Left), A->Height) + 1;
+  
+  	return B;
+  }
+  
+  ```
+  
   * 右单璇
+  
+  ```c
+  // 右单璇
+  AVLTree singleRightRotation(AVLTree A)
+  {
+  	// A必须有一个右子树节点
+  	// 将A与B做左单璇，更新A与B的高度，返回新的节点
+  	AVLTree B = A->Right;
+  	A->Right = B->Left;
+  	B->Right = A;
+  	A->Height = Max(getHeight(A->Right), getHeight(A->Left)) + 1;
+  	B->Height = Max(getHeight(B->Right), A->Height) + 1;
+  	return B;
+  }
+  ```
+  
+  
+  
   * 左右双璇
+
+```c
+// 平衡二叉树
+
+typedef struct AVLNode* Position;
+typedef Position AVLTree;
+struct AVLNode {
+	ElementType Data;   // 结点数据
+	AVLTree Left;       // 指向左子树
+	AVLTree Right;      // 指向右子树
+	int Height;         // 树高
+};
+
+int Max(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+// 获取高度
+int getHeight(AVLTree A)
+{
+	if (A = NULL)
+		return 0;
+	int leftHeight = getHeight(A->Left);
+	int rightHeight = getHeight(A->Right);
+	return Max(leftHeight, rightHeight);
+}
+
+// 左右璇
+AVLTree doubleLeftRightRotation(AVLTree A)
+{
+	// 必须有一个子节点B，B必须有一个右节点C
+	// 将A 与 B 做两次单璇，返回C
+	A->Left = singleLeftRotation(A->Left);
+	// 将A与C做左单璇， C被返回
+	return singleLeftRotation(A);
+}
+
+// 平衡二叉树的插入
+AVLTree Insert(AVLTree T, ElementType X)
+{  // 将x插入AVL树 T 中，并且返回调整后的AVL树
+	if (!T)  // 如果插入的是空树，就新建一个包含节点的空树
+	{
+		T = (AVLTree)malloc(sizeof(AVLTree));
+		T->Data = X;
+		T->Height = 0;
+		T->Left = T->Right = NULL;
+	}
+	else if (X < T->Data)
+	{
+		// 插入T的左子树
+		T->Left = Insert(T->Left, X);
+		// 如果需要左旋
+		if (getHeight(T->Left) - getHeight(T->Right) == 2)
+			if (X < T->Left->Data)
+				T = singleLeftRotation(T);   // 左单璇
+			else
+				T = doubleLeftRightRotation(T);  // 左右双璇
+	}
+	else if (X > T->Data)
+	{
+		// 插入T的右子树
+		T->Right = Insert(T->Right, X);
+		// 如果需要右旋
+		if (getHeight(T->Left) - getHeight(T->Right) == 2)
+			if (X < T->Right->Data)
+				T = singleRightRotation(T);
+			else
+				T = doubleLeftRightRotation(T);   // 左右双璇
+	}
+
+	// 最后更新树的高度
+	T->Height = Max(getHeight(T->Left), getHeight(T->Right)) + 1;
+	return T;
+}
+```
+
+
+
+## 堆
+
+* 优先队列
+
+* 堆的定义
+
+
+
+### 最大堆的操作
+
+* 最大堆的插入
+
+
 
