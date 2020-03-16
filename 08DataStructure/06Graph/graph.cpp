@@ -3,6 +3,6 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::cout << sizeof(Vnode) << std::endl;
 }
 
