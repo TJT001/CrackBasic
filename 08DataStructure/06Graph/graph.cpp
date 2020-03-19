@@ -3,6 +3,6 @@
 
 int main()
 {
-    std::cout << sizeof(Vnode) << std::endl;
+	return 0;
 }
 
